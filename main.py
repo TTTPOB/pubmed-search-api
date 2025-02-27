@@ -52,7 +52,7 @@ def get_article_info(pmid: str | List[str]):
             abstract = "\n".join(abstract)
         author_list = a["MedlineCitation"]["Article"]["AuthorList"]
         author_list = [
-            f"{a.get("ForeName", "NAME")}, {a.get("LastName", "NAME")}"
+            f"{a.get("ForeName", "NAME")} {a.get("LastName", "NAME")}"
             for a in author_list
         ]
         resp.append(
@@ -79,7 +79,10 @@ class ArticleInfo:
 
 def re_encode(s: str) -> str:
     # remove url encode
-    return unquote(s)
+    l.info(f"Re-encoding {s}")
+    result = unquote(s)
+    l.info(f"Unquoted: {result}")
+    return result
 
 
 app = FastAPI()
