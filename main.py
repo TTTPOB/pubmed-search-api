@@ -48,7 +48,7 @@ def get_article_info(pmid: str | List[str]):
         if isinstance(abstract, list):
             abstract = "\n".join(abstract)
         author_list = a["MedlineCitation"]["Article"]["AuthorList"]
-        author_list = [f"{a['LastName']}, {a['Initials']}" for a in author_list]
+        author_list = [f"{a.get("ForeName", "NAME")}, {a.get("LastName", "NAME")}" for a in author_list]
         resp.append(
             {
                 "doi": doi,
@@ -90,7 +90,7 @@ def article_info(pmid: str) -> List[ArticleInfo]:
 @app.get("/search_details")
 def search_details(query: str, retmax: int = 10) -> List[ArticleInfo]:
     pmids = submit_pubmed_query(query, retmax)
-    return get_article_info(pmids)
+    return get_article_info(",".join(pmids))
 
 
 if __name__ == "__main__":
