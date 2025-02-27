@@ -47,12 +47,12 @@ def get_article_info(pmid: str | List[str]):
                 break
         url = f"https://doi.org/{doi}"
         title = a["MedlineCitation"]["Article"]["ArticleTitle"]
-        abstract = a["MedlineCitation"]["Article"]["Abstract"]["AbstractText"]
+        abstract = a["MedlineCitation"]["Article"].get("Abstract", {}).get("AbstractText", "NO ABSTRACT AVAILABLE")
         if isinstance(abstract, list):
             abstract = "\n".join(abstract)
-        author_list = a["MedlineCitation"]["Article"]["AuthorList"]
+        author_list = a["MedlineCitation"]["Article"].get("AuthorList", [])
         author_list = [
-            f"{a.get("ForeName", "NAME")} {a.get("LastName", "NAME")}"
+            f"{a.get('ForeName', 'NAME')} {a.get('LastName', 'NAME')}"
             for a in author_list
         ]
         resp.append(
