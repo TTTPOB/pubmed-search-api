@@ -81,7 +81,9 @@ def search(query: str, retmax: int = 10) -> List[str]:
 
 
 @app.get("/article_info")
-def article_info(pmid: str | List[str]) -> List[ArticleInfo]:
+def article_info(pmid: str) -> List[ArticleInfo]:
+    if "," in pmid:
+        pmid = pmid.split(",")
     return get_article_info(pmid)
 
 
